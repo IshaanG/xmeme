@@ -1,0 +1,1 @@
+POST http://localhost:8081/memes?name=ashok%20kumar&url=https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg&caption=This%20is%20a%20meme
