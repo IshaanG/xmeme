@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "cd .. && git subtree push --prefix backend heroku main",
-    "logs:prod": "heroku logs --tail",
+    "logs": "heroku logs --tail",
     "lint": "eslint ."
   },
   "keywords": [],
