@@ -9,7 +9,7 @@ app.use(morgan('dev'))
 app.use(cors())
 app.use(express.json())
 
-app.post('/memes', (request, response,next) => {
+app.post('/memes', (request, response, next) => {
 
     const query = request.query
 
@@ -19,6 +19,7 @@ app.post('/memes', (request, response,next) => {
         caption: query.caption,
         date: new Date()
     })
+
     meme.save()
         .then(savedMeme => {
             console.log(savedMeme)
@@ -28,24 +29,28 @@ app.post('/memes', (request, response,next) => {
         .catch(error => next(error))
 })
 
-app.get('/memes', (request, response) => {
-    Meme.find({}).then(memes => {
-        response.json(memes.map(meme => {
-            const { id, name, url, caption } = meme.toJSON()
-            return { id, name, url, caption }
-        }))
-    })
+app.get('/memes', (request, response, next) => {
+    Meme.find({})
+        .then(memes => {
+            response.json(memes.map(meme => {
+                const { id, name, url, caption } = meme.toJSON()
+                return { id, name, url, caption }
+            }))
+        })
+        .catch(error => next(error))
 })
 
-app.get('/memes/:id', (request, response,next) => {
-    Meme.findById(request.params.id).then(meme => {
-        if (meme) {
-            const { id, name, url, caption } = meme
-            response.json({ id, name, url, caption })
-        } else {
-            response.status(404).end()
-        }
-    }).catch(error => next(error))
+app.get('/memes/:id', (request, response, next) => {
+    Meme.findById(request.params.id)
+        .then(meme => {
+            if (meme) {
+                const { id, name, url, caption } = meme
+                response.json({ id, name, url, caption })
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => next(error))
 })
 
 
@@ -63,11 +68,12 @@ app.get('/memes/:id', (request, response,next) => {
 //       })
 //       .catch(error => next(error))
 //   })
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
-app.use(unknownEndpoint)
 
+app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
@@ -80,6 +86,7 @@ const errorHandler = (error, request, response, next) => {
 
     next(error)
 }
+
 app.use(errorHandler)
 
 const PORT = process.env.PORT
