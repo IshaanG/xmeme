@@ -10,13 +10,15 @@ const initialMemes = [
         'name': 'MS Dhoni',
         'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
         'caption': 'Meme for my place',
-        'date': new Date()
+        'created': new Date(),
+        'updated': new Date()
     },
     {
         'name': 'Viral Kohli',
         'url': 'https://images.pexels.com/photos/1078983/pexels-photo-1078983.jpeg',
         'caption': 'Another home meme',
-        'date': new Date()
+        'created': new Date(),
+        'updated': new Date()
     }
 ]
 
@@ -47,6 +49,28 @@ test('a specific meme is within the returned memes', async () => {
     const contents = response.body.map(r => r.name)
     expect(contents).toContain(
         'Viral Kohli'
+    )
+})
+
+test('a valid meme can be added', async () => {
+    const newMeme = {
+        'name': 'MS Dhoni',
+        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
+        'caption': 'Meme for my place',
+    }
+    await api
+        .post('/memes')
+        .query(newMeme)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/memes')
+
+    const contents = response.body.map(r => r.name)
+
+    expect(response.body).toHaveLength(initialMemes.length + 1)
+    expect(contents).toContain(
+        'MS Dhoni'
     )
 })
 

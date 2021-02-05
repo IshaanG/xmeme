@@ -4,7 +4,8 @@ const memeSchema = new mongoose.Schema({
     name: { type: String, required: true },
     url: { type: String, required: true },
     caption: { type: String, required: true },
-    date: { type: Date, required: true }
+    created: { type: Date, required: true },
+    updated: { type: Date, required: true }
 })
 
 memeSchema.set('toJSON', {

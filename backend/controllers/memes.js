@@ -9,7 +9,8 @@ memesRouter.post('/', (request, response, next) => {
         name: query.name,
         url: query.url,
         caption: query.caption,
-        date: new Date()
+        created: new Date(),
+        updated: new Date()
     })
 
     meme.save()
