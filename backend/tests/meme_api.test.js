@@ -1,33 +1,15 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const helper = require('./test_helper')
 const app = require('../app')
-
 const api = supertest(app)
 const Meme = require('../models/meme')
 
-const initialMemes = [
-    {
-        'name': 'MS Dhoni',
-        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-        'caption': 'Meme for my place',
-        'created': new Date(),
-        'updated': new Date()
-    },
-    {
-        'name': 'Viral Kohli',
-        'url': 'https://images.pexels.com/photos/1078983/pexels-photo-1078983.jpeg',
-        'caption': 'Another home meme',
-        'created': new Date(),
-        'updated': new Date()
-    }
-]
-
-
 beforeEach(async () => {
     await Meme.deleteMany({})
-    let memeObject = new Meme(initialMemes[0])
+    let memeObject = new Meme(helper.initialMemes[0])
     await memeObject.save()
-    memeObject = new Meme(initialMemes[1])
+    memeObject = new Meme(helper.initialMemes[1])
     await memeObject.save()
 })
 test('memes are returned as json', async () => {
@@ -40,14 +22,14 @@ test('memes are returned as json', async () => {
 test('all memes are returned', async () => {
     const response = await api.get('/memes')
 
-    expect(response.body).toHaveLength(initialMemes.length)
+    expect(response.body).toHaveLength(helper.initialMemes.length)
 })
 
 test('a specific meme is within the returned memes', async () => {
     const response = await api.get('/memes')
 
-    const contents = response.body.map(r => r.name)
-    expect(contents).toContain(
+    const names = response.body.map(r => r.name)
+    expect(names).toContain(
         'Viral Kohli'
     )
 })
@@ -64,14 +46,46 @@ test('a valid meme can be added', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-    const response = await api.get('/memes')
-
-    const contents = response.body.map(r => r.name)
-
-    expect(response.body).toHaveLength(initialMemes.length + 1)
-    expect(contents).toContain(
+    const memesAtEnd = await helper.memesInDb()
+    expect(memesAtEnd).toHaveLength(helper.initialMemes.length + 1)
+    const names = memesAtEnd.map(n => n.name)
+    expect(names).toContain(
         'MS Dhoni'
     )
+})
+
+test('meme without name is not added', async () => {
+    const newMeme = {
+        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
+        'caption': 'Meme for my place',
+    }
+
+    await api
+        .post('/memes')
+        .query(newMeme)
+        .expect(400)
+
+    const memesAtEnd = await helper.memesInDb()
+
+    expect(memesAtEnd).toHaveLength(helper.initialMemes.length)
+})
+
+test('a specific meme can be viewed', async () => {
+    const memesAtStart = await helper.memesInDb()
+
+    const memeToView = memesAtStart[0]
+
+    const resultMeme = await api
+        .get(`/memes/${memeToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const processedMemeToView = JSON.parse(JSON.stringify(memeToView))
+
+    expect(resultMeme.body.caption).toEqual(processedMemeToView.caption)
+    expect(resultMeme.body.id).toEqual(processedMemeToView.id)
+    expect(resultMeme.body.name).toEqual(processedMemeToView.name)
+    expect(resultMeme.body.url).toEqual(processedMemeToView.url)
 })
 
 afterAll(() => {

@@ -1,7 +1,7 @@
 const memesRouter = require('express').Router()
 const Meme = require('../models/meme')
 
-memesRouter.post('/', (request, response, next) => {
+memesRouter.post('/', async (request, response, next) => {
 
     const query = request.query
 
@@ -13,7 +13,7 @@ memesRouter.post('/', (request, response, next) => {
         updated: new Date()
     })
 
-    meme.save()
+    await meme.save()
         .then(savedMeme => {
             console.log(savedMeme)
             const { id } = savedMeme.toJSON()
