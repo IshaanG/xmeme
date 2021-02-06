@@ -7,86 +7,134 @@ const Meme = require('../models/meme')
 
 beforeEach(async () => {
     await Meme.deleteMany({})
-    let memeObject = new Meme(helper.initialMemes[0])
-    await memeObject.save()
-    memeObject = new Meme(helper.initialMemes[1])
-    await memeObject.save()
+
+    const memeObject = helper.initialMemes.map(meme => new Meme(meme))
+    const promiseArray = memeObject.map(meme => meme.save())
+    await Promise.all(promiseArray)
 })
-test('memes are returned as json', async () => {
-    await api
-        .get('/memes')
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-})
+describe('when there is initially some memes saved', () => {
+    test('memes are returned as json', async () => {
+        await api
+            .get('/memes')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
 
-test('all memes are returned', async () => {
-    const response = await api.get('/memes')
+    test('all memes are returned', async () => {
+        const response = await api.get('/memes')
 
-    expect(response.body).toHaveLength(helper.initialMemes.length)
-})
+        expect(response.body).toHaveLength(helper.initialMemes.length)
+    })
 
-test('a specific meme is within the returned memes', async () => {
-    const response = await api.get('/memes')
+    test('a specific meme is within the returned memes', async () => {
+        const response = await api.get('/memes')
 
-    const names = response.body.map(r => r.name)
-    expect(names).toContain(
-        'Viral Kohli'
-    )
-})
-
-test('a valid meme can be added', async () => {
-    const newMeme = {
-        'name': 'MS Dhoni',
-        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-        'caption': 'Meme for my place',
-    }
-    await api
-        .post('/memes')
-        .query(newMeme)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
-
-    const memesAtEnd = await helper.memesInDb()
-    expect(memesAtEnd).toHaveLength(helper.initialMemes.length + 1)
-    const names = memesAtEnd.map(n => n.name)
-    expect(names).toContain(
-        'MS Dhoni'
-    )
+        const names = response.body.map(r => r.name)
+        expect(names).toContain(
+            'Viral Kohli'
+        )
+    })
 })
 
-test('meme without name is not added', async () => {
-    const newMeme = {
-        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-        'caption': 'Meme for my place',
-    }
+describe('viewing a specific meme', () => {
+    test('succeeds with a valid id', async () => {
+        const memesAtStart = await helper.memesInDb()
 
-    await api
-        .post('/memes')
-        .query(newMeme)
-        .expect(400)
+        const memeToView = memesAtStart[0]
 
-    const memesAtEnd = await helper.memesInDb()
+        const resultMeme = await api
+            .get(`/memes/${memeToView.id}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
-    expect(memesAtEnd).toHaveLength(helper.initialMemes.length)
+        const processedMemeToView = JSON.parse(JSON.stringify(memeToView))
+
+        expect(resultMeme.body.caption).toEqual(processedMemeToView.caption)
+        expect(resultMeme.body.id).toEqual(processedMemeToView.id)
+        expect(resultMeme.body.name).toEqual(processedMemeToView.name)
+        expect(resultMeme.body.url).toEqual(processedMemeToView.url)
+
+    })
+
+    test('fails with statuscode 404 if meme does not exist', async () => {
+        const validNonexistingId = await helper.nonExistingId()
+
+        console.log(validNonexistingId)
+
+        await api
+            .get(`/memes/${validNonexistingId}`)
+            .expect(404)
+    })
+
+    test('fails with statuscode 400 id is invalid', async () => {
+        const invalidId = '5a3d5da59070081a82a3445'
+
+        await api
+            .get(`/memes/${invalidId}`)
+            .expect(400)
+    })
 })
 
-test('a specific meme can be viewed', async () => {
-    const memesAtStart = await helper.memesInDb()
+describe('addition of a new meme', () => {
+    test('succeeds with valid data', async () => {
+        const newMeme = {
+            'name': 'MS Dhoni',
+            'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
+            'caption': 'Meme for my place',
+        }
+        await api
+            .post('/memes')
+            .query(newMeme)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
-    const memeToView = memesAtStart[0]
+        const memesAtEnd = await helper.memesInDb()
+        expect(memesAtEnd).toHaveLength(helper.initialMemes.length + 1)
+        const names = memesAtEnd.map(n => n.name)
+        expect(names).toContain(
+            'MS Dhoni'
+        )
+    })
+    test('fails with status code 400 if data invaild', async () => {
+        const newMeme = {
+            'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
+            'caption': 'Meme for my place',
+        }
 
-    const resultMeme = await api
-        .get(`/memes/${memeToView.id}`)
-        .expect(200)
-        .expect('Content-Type', /application\/json/)
+        await api
+            .post('/memes')
+            .query(newMeme)
+            .expect(400)
 
-    const processedMemeToView = JSON.parse(JSON.stringify(memeToView))
+        const memesAtEnd = await helper.memesInDb()
 
-    expect(resultMeme.body.caption).toEqual(processedMemeToView.caption)
-    expect(resultMeme.body.id).toEqual(processedMemeToView.id)
-    expect(resultMeme.body.name).toEqual(processedMemeToView.name)
-    expect(resultMeme.body.url).toEqual(processedMemeToView.url)
+        expect(memesAtEnd).toHaveLength(helper.initialMemes.length)
+    })
+
 })
+
+// TODO: PATCH tests
+// describe('deletion of a note', () => {
+//     test('succeeds with status code 204 if id is valid', async () => {
+//         const notesAtStart = await helper.notesInDb()
+//         const noteToDelete = notesAtStart[0]
+
+//         await api
+//             .delete(`/api/notes/${noteToDelete.id}`)
+//             .expect(204)
+
+//         const notesAtEnd = await helper.notesInDb()
+
+//         expect(notesAtEnd).toHaveLength(
+//             helper.initialNotes.length - 1
+//         )
+
+//         const contents = notesAtEnd.map(r => r.content)
+
+//         expect(contents).not.toContain(noteToDelete.content)
+//     })
+// })
+
 
 afterAll(() => {
     mongoose.connection.close()

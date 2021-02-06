@@ -22,6 +22,8 @@ const nonExistingId = async () => {
         'name': 'MS Dhoni',
         'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
         'caption': 'Meme for my place',
+        'updated': new Date(),
+        'created': new Date()
     })
     await meme.save()
     await meme.remove()
