@@ -59,8 +59,6 @@ describe('viewing a specific meme', () => {
     test('fails with statuscode 404 if meme does not exist', async () => {
         const validNonexistingId = await helper.nonExistingId()
 
-        console.log(validNonexistingId)
-
         await api
             .get(`/memes/${validNonexistingId}`)
             .expect(404)
@@ -78,9 +76,9 @@ describe('viewing a specific meme', () => {
 describe('addition of a new meme', () => {
     test('succeeds with valid data', async () => {
         const newMeme = {
-            'name': 'MS Dhoni',
-            'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-            'caption': 'Meme for my place'
+            'name': 'Sachin Tendulkar',
+            'url': 'https://images.pexels.com/photos/6165877/pexels-photo-6165877.jpeg',
+            'caption': 'Yeah memes please'
         }
         await api
             .post('/memes')
@@ -92,13 +90,13 @@ describe('addition of a new meme', () => {
         expect(memesAtEnd).toHaveLength(helper.initialMemes.length + 1)
         const names = memesAtEnd.map(n => n.name)
         expect(names).toContain(
-            'MS Dhoni'
+            'Sachin Tendulkar'
         )
     })
     test('fails with status code 400 if data invaild', async () => {
         const newMeme = {
-            'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-            'caption': 'Meme for my place',
+            'url': 'https://images.pexels.com/photos/3867204/pexels-photo-3867204.jpeg',
+            'caption': 'You can see me',
         }
 
         await api

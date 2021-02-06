@@ -19,9 +19,9 @@ const initialMemes = [
 
 const nonExistingId = async () => {
     const meme = new Meme({
-        'name': 'MS Dhoni',
-        'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-        'caption': 'Meme for my place',
+        'name': 'Rohit Sharma',
+        'url': 'https://images.pexels.com/photos/5902130/pexels-photo-5902130.jpeg',
+        'caption': 'Using stock pics',
         'updated': new Date(),
         'created': new Date()
     })
