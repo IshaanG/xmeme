@@ -84,7 +84,7 @@ describe('addition of a new meme', () => {
         }
         await api
             .post('/memes')
-            .query(newMeme)
+            .send(newMeme)
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -103,7 +103,7 @@ describe('addition of a new meme', () => {
 
         await api
             .post('/memes')
-            .query(newMeme)
+            .send(newMeme)
             .expect(400)
 
         const memesAtEnd = await helper.memesInDb()

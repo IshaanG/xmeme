@@ -4,12 +4,12 @@ const logger = require('../utils/logger')
 
 memesRouter.post('/', async (request, response) => {
 
-    const query = request.query
+    const body = request.body
 
     const meme = new Meme({
-        name: query.name,
-        url: query.url,
-        caption: query.caption,
+        name: body.name,
+        url: body.url,
+        caption: body.caption,
         created: new Date(),
         updated: new Date()
     })
