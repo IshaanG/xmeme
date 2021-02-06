@@ -80,7 +80,7 @@ describe('addition of a new meme', () => {
         const newMeme = {
             'name': 'MS Dhoni',
             'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-            'caption': 'Meme for my place',
+            'caption': 'Meme for my place'
         }
         await api
             .post('/memes')
