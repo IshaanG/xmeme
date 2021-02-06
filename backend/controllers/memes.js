@@ -1,7 +1,7 @@
 const memesRouter = require('express').Router()
 const Meme = require('../models/meme')
 
-memesRouter.post('/', async (request, response, next) => {
+memesRouter.post('/', async (request, response) => {
 
     const query = request.query
 
@@ -13,37 +13,30 @@ memesRouter.post('/', async (request, response, next) => {
         updated: new Date()
     })
 
-    await meme.save()
-        .then(savedMeme => {
-            console.log(savedMeme)
-            const { id } = savedMeme.toJSON()
-            response.json({ id })
-        })
-        .catch(error => next(error))
+    const savedMeme = await meme.save()
+
+    console.log(savedMeme)
+    const { id } = savedMeme.toJSON()
+    response.json({ id })
+
 })
 
-memesRouter.get('/', (request, response, next) => {
-    Meme.find({})
-        .then(memes => {
-            response.json(memes.map(meme => {
-                const { id, name, url, caption } = meme.toJSON()
-                return { id, name, url, caption }
-            }))
-        })
-        .catch(error => next(error))
+memesRouter.get('/', async (request, response) => {
+    const memes = await Meme.find({})
+    response.json(memes.map(meme => {
+        const { id, name, url, caption } = meme.toJSON()
+        return { id, name, url, caption }
+    }))
 })
 
-memesRouter.get('/:id', (request, response, next) => {
-    Meme.findById(request.params.id)
-        .then(meme => {
-            if (meme) {
-                const { id, name, url, caption } = meme
-                response.json({ id, name, url, caption })
-            } else {
-                response.status(404).end()
-            }
-        })
-        .catch(error => next(error))
+memesRouter.get('/:id', async (request, response) => {
+    const meme = await Meme.findById(request.params.id)
+    if (meme) {
+        const { id, name, url, caption } = meme
+        response.json({ id, name, url, caption })
+    } else {
+        response.status(404).end()
+    }
 })
 
 module.exports = memesRouter
