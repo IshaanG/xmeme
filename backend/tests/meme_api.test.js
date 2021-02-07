@@ -1,12 +1,10 @@
-// const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
-// const Meme = require('../models/meme')
 const db = require('../db')
 
-const initialRows = 2
+const initialRows = 150
 
 beforeEach(async () => {
     await helper.clearDb()
@@ -104,7 +102,7 @@ describe('addition of a new meme', () => {
         expect(memesAtEnd).toHaveLength(initialRows)
     })
 
-    test('duplicate posts whould return 409', async () => {
+    test('duplicate posts returns status code 409', async () => {
         const newMeme = {
             'name': 'ABD Wow',
             'url': 'https://images.pexels.com/photos/6165877/pexels-photo-6165877.jpeg',
@@ -158,5 +156,6 @@ describe('updation of a meme', () => {
 })
 
 afterAll(() => {
+    helper.clearDb()
     db.end()
 })

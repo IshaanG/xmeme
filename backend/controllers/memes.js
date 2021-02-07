@@ -4,7 +4,7 @@ const db = require('../db')
 memesRouter.post('/', async (request, response) => {
     const body = request.body
 
-    const check = await db.query('SELECT * FROM memes WHERE name = $1 AND url = $2 AND caption = $3',
+    const check = await db.query('SELECT id FROM memes WHERE name = $1 AND url = $2 AND caption = $3',
         [body.name, body.url, body.caption])
     if (check.rows.length === 0) {
         const result = await db.query(
@@ -18,9 +18,8 @@ memesRouter.post('/', async (request, response) => {
 })
 
 memesRouter.get('/', async (request, response) => {
-    const result = await db.query('SELECT * FROM memes ORDER BY created DESC LIMIT 100')
-    response.json(result.rows.map(meme =>
-        ({ id: meme.id, name: meme.name, url: meme.url, caption: meme.caption })))
+    const result = await db.query('SELECT id, name, url, caption FROM memes ORDER BY created DESC LIMIT 100')
+    response.json(result.rows)
 })
 
 memesRouter.get('/:id', async (request, response) => {

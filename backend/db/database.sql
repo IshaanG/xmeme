@@ -1,5 +1,6 @@
 -- run: psql -U postgres -d postgres -f database.sql
 
+-- create production database
 CREATE DATABASE xmeme;
 
 -- connect to the newly created database
@@ -14,6 +15,11 @@ CREATE TABLE memes(
     updated TIMESTAMPTZ NOT NULL
 );
 
+CREATE INDEX name_url_caption on memes(name, url, caption);
+CREATE INDEX created_desc on memes(created desc);
+
+
+-- create test database
 CREATE DATABASE xmeme_test;
 
 -- connect to the newly created database
@@ -27,3 +33,6 @@ CREATE TABLE memes(
     created TIMESTAMPTZ NOT NULL,
     updated TIMESTAMPTZ NOT NULL
 );
+
+CREATE INDEX name_url_caption on memes(name, url, caption);
+CREATE INDEX created_desc on memes(created desc);

@@ -14,7 +14,6 @@ const errorHandler = (error, request, response, next) => {
     } else if (error.name === 'SyntaxError') {
         return response.status(400).json({ error: 'invalid JSON' })
     }
-    console.log(error.name)
 
     next(error)
 }
