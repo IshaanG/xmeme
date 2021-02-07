@@ -41,12 +41,12 @@ memesRouter.patch('/:id', async (request, response) => {
 
     let result
     if (body.url) {
-        result = await db.query('UPDATE memes SET url = $1 WHERE id = $2',
-            [body.url, params.id])
+        result = await db.query('UPDATE memes SET url = $1, updated = $2 WHERE id = $3',
+            [body.url, new Date(), params.id])
     }
     if (body.caption) {
-        result = await db.query('UPDATE memes SET caption = $1 WHERE id = $2',
-            [body.caption, params.id])
+        result = await db.query('UPDATE memes SET caption = $1, updated = $2 WHERE id = $3',
+            [body.caption, new Date(), params.id])
     }
     if (!result || result.rowCount) {
         response.status(204).end()
