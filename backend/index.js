@@ -5,6 +5,7 @@ const logger = require('./utils/logger')
 
 const server = http.createServer(app)
 // TODO: documentation & comments
+// TODO: Dockerize
 // TODO: swagger on http://localhost:8080/swagger-ui/
 // TODO: support both HTTP & HTTPS
 server.listen(config.PORT, () => {
