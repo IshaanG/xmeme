@@ -1,13 +1,21 @@
 require('dotenv').config()
 
 const PORT = process.env.PORT
-let MONGODB_URI = process.env.MONGODB_URI
+const PGHOST = process.env.PGHOST
+const PGUSER = process.env.PGUSER
+const PGPASSWORD = process.env.PGPASSWORD
+const PGPORT = process.env.PGPORT
+let PGDATABASE = process.env.PGDATABASE
 
 if (process.env.NODE_ENV === 'test') {
-    MONGODB_URI = process.env.TEST_MONGODB_URI
+    PGDATABASE = process.env.TEST_PGDATABASE
 }
 
 module.exports = {
-    MONGODB_URI,
-    PORT
+    PORT,
+    PGHOST,
+    PGUSER,
+    PGDATABASE,
+    PGPASSWORD,
+    PGPORT
 }
