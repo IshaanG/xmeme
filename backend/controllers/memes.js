@@ -54,5 +54,5 @@ memesRouter.patch('/:id', async (request, response) => {
         response.status(404).send({ error: 'id not found' })
     }
 })
-// TODO: More error codes for incorrect requests
+
 module.exports = memesRouter

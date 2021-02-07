@@ -1,41 +1,34 @@
-// const Meme = require('../models/meme')
+const db = require('../db')
 
-// const initialMemes = [
-//     {
-//         'name': 'MS Dhoni',
-//         'url': 'https://images.pexels.com/photos/3573382/pexels-photo-3573382.jpeg',
-//         'caption': 'Meme for my place',
-//         'created': new Date(),
-//         'updated': new Date()
-//     },
-//     {
-//         'name': 'Viral Kohli',
-//         'url': 'https://images.pexels.com/photos/1078983/pexels-photo-1078983.jpeg',
-//         'caption': 'Another home meme',
-//         'created': new Date(),
-//         'updated': new Date()
-//     }
-// ]
+const genQueryString = (rows) => {
+    const query = `
+    insert into memes (
+        name, url, caption, created, updated
+    )
+    select
+        left(md5(i::text), 10),
+        md5(random()::text),
+        md5(random()::text),
+        now() - (random() * interval '100 days') - (interval '200 days'),
+        now() - (random() * interval '100 days')
+    from generate_series(1, ${rows}) s(i)
+`
+    return query
+}
 
-// const nonExistingId = async () => {
-//     const meme = new Meme({
-//         'name': 'Rohit Sharma',
-//         'url': 'https://images.pexels.com/photos/5902130/pexels-photo-5902130.jpeg',
-//         'caption': 'Using stock pics',
-//         'updated': new Date(),
-//         'created': new Date()
-//     })
-//     await meme.save()
-//     await meme.remove()
+const memesInDb = async () => {
+    const result = await db.query('SELECT * FROM memes')
+    return result.rows
+}
 
-//     return meme._id.toString()
-// }
+const clearDb = async () => {
+    await db.query('TRUNCATE memes RESTART IDENTITY')
+}
+const getMemeWithId = async (id) => {
+    const result = await db.query('SELECT * FROM memes where id = $1',[id])
+    return result.rows[0]
+}
 
-// const memesInDb = async () => {
-//     const notes = await Meme.find({})
-//     return notes.map(note => note.toJSON())
-// }
-
-// module.exports = {
-//     initialMemes, nonExistingId, memesInDb
-// }
+module.exports = {
+    genQueryString, memesInDb, clearDb, getMemeWithId
+}

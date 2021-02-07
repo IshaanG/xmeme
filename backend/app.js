@@ -8,7 +8,7 @@ const morgan = require('morgan')
 
 app.use(cors())
 app.use(express.json())
-app.use(morgan('dev'))
+app.use(morgan('dev', { skip: () => process.env.NODE_ENV === 'test' }))
 app.use('/memes', memesRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
