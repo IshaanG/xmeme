@@ -1,7 +1,7 @@
-const db = require('../db')
+const db = require('../db');
 
 const genQueryString = (rows) => {
-    const query = `
+  const query = `
     insert into memes (
         name, url, caption, created, updated
     )
@@ -12,23 +12,23 @@ const genQueryString = (rows) => {
         now() - (random() * interval '100 days') - (interval '200 days'),
         now() - (random() * interval '100 days')
     from generate_series(1, ${rows}) s(i)
-`
-    return query
-}
+    `;
+  return query;
+};
 
 const memesInDb = async () => {
-    const result = await db.query('SELECT * FROM memes')
-    return result.rows
-}
+  const result = await db.query('SELECT * FROM memes');
+  return result.rows;
+};
 
 const clearDb = async () => {
-    await db.query('TRUNCATE memes RESTART IDENTITY')
-}
+  await db.query('TRUNCATE memes RESTART IDENTITY');
+};
 const getMemeWithId = async (id) => {
-    const result = await db.query('SELECT * FROM memes where id = $1',[id])
-    return result.rows[0]
-}
+  const result = await db.query('SELECT * FROM memes where id = $1', [id]);
+  return result.rows[0];
+};
 
 module.exports = {
-    genQueryString, memesInDb, clearDb, getMemeWithId
-}
+  genQueryString, memesInDb, clearDb, getMemeWithId,
+};

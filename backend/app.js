@@ -1,16 +1,17 @@
-const express = require('express')
-require('express-async-errors')
-const app = express()
-const cors = require('cors')
-const memesRouter = require('./controllers/memes')
-const middleware = require('./utils/middleware')
-const morgan = require('morgan')
+const express = require('express');
+require('express-async-errors');
 
-app.use(cors())
-app.use(express.json())
-app.use(morgan('dev', { skip: () => process.env.NODE_ENV === 'test' }))
-app.use('/memes', memesRouter)
-app.use(middleware.unknownEndpoint)
-app.use(middleware.errorHandler)
+const app = express();
+const cors = require('cors');
+const morgan = require('morgan');
+const memesRouter = require('./controllers/memes');
+const middleware = require('./utils/middleware');
 
-module.exports = app
+app.use(cors());
+app.use(express.json());
+app.use(morgan('dev', { skip: () => process.env.NODE_ENV === 'test' }));
+app.use('/memes', memesRouter);
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
+
+module.exports = app;
