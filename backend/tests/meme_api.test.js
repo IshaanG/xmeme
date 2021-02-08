@@ -46,7 +46,7 @@ describe('viewing a specific meme', () => {
   });
 
   test('fails with statuscode 404 if meme does not exist', async () => {
-    const nonexistingId = Math.max(12343, initialRows + 1);
+    const nonexistingId = Math.max(12343, initialRows + 134);
 
     await api
       .get(`/memes/${nonexistingId}`)
