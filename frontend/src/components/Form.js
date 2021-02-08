@@ -13,22 +13,6 @@ const Form = (props) => {
     handleUrlChange,
   } = props;
   return (
-  // <div>
-  //   <div className="field">
-  //     <label className="label" htmlFor="name">Name</label>
-  //     <div className="control">
-  //       <input className="input" type="text" placeholder="Text input" id="name" />
-  //     </div>
-  //   </div>
-  //   <div className="field has-addons">
-  //     <div className="control">
-  //       <input className="input" type="text" placeholder="Text input" />
-  //     </div>
-  //     <div className="control">
-  //       <button className="button is-primary" type="button">Submit</button>
-  //     </div>
-  //   </div>
-  // </div>
     <form onSubmit={handleOnSubmit}>
 
       <div className="field">

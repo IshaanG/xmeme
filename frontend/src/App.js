@@ -66,8 +66,8 @@ const App = () => {
   }, [successMessage]);
 
   // TODO
+  // eslint-disable-next-line no-unused-vars
   const editMeme = (event) => {
-    console.log(event);
   };
 
   return (

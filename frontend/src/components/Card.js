@@ -1,20 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Img } from 'react-image';
 
 const Card = (props) => {
   const {
     name,
     caption,
     url,
+    // eslint-disable-next-line no-unused-vars
     handleEditClick,
   } = props;
-  console.log('card begins', name, caption, url, handleEditClick, 'card ends');
   return (
     <div className="column is-one-third">
       <div className="card">
         <div className="card-image">
           <figure className="image is-4by3">
-            <img src={url} alt={caption} />
+
+            <Img src={[url, `${process.env.PUBLIC_URL}/placeholder-placeholder-everywhere.jpg`]} alt={caption} loading="lazy" />
+
           </figure>
         </div>
         <div className="card-content">
