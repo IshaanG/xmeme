@@ -11,6 +11,7 @@ const Form = (props) => {
     handleCaptionChange,
     handleNewUrl,
     handleUrlChange,
+    validUrl,
   } = props;
   return (
     <form onSubmit={handleOnSubmit}>
@@ -56,6 +57,16 @@ const Form = (props) => {
           <button className="button is-link" type="submit">Submit Meme</button>
         </div>
       </div>
+
+      <p
+        className="help is-danger"
+        style={{
+          visibility: validUrl ? 'hidden' : 'visible',
+        }}
+      >
+        This URL is invalid
+      </p>
+
     </form>
 
   );
@@ -63,17 +74,13 @@ const Form = (props) => {
 
 Form.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
-  handleNewName: PropTypes.string,
+  handleNewName: PropTypes.string.isRequired,
   handleNameChange: PropTypes.func.isRequired,
-  handleNewCaption: PropTypes.string,
+  handleNewCaption: PropTypes.string.isRequired,
   handleCaptionChange: PropTypes.func.isRequired,
-  handleNewUrl: PropTypes.string,
+  handleNewUrl: PropTypes.string.isRequired,
   handleUrlChange: PropTypes.func.isRequired,
-};
-Form.defaultProps = {
-  handleNewName: '',
-  handleNewCaption: '',
-  handleNewUrl: '',
+  validUrl: PropTypes.bool.isRequired,
 };
 
 export default Form;

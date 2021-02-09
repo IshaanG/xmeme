@@ -19,7 +19,7 @@ memesRouter.post('/', async (request, response) => {
           VALUES ($1, $2, $3, $4, $5) RETURNING id`,
     [body.name, body.url, body.caption, new Date(), new Date()],
   );
-  response.status(201).json(result.rows[0]);
+  return response.status(201).json(result.rows[0]);
 });
 
 memesRouter.get('/', async (request, response) => {

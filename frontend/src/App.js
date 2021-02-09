@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import validator from 'validator';
 import memeService from './services/memes';
 import Form from './components/Form';
 import Deck from './components/Deck';
@@ -12,6 +13,7 @@ const App = () => {
   const [newUrl, setNewUrl] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [validUrl, setValidUrl] = useState(true);
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -23,10 +25,12 @@ const App = () => {
 
   const handleUrlChange = (event) => {
     setNewUrl(event.target.value);
+    setValidUrl(validator.isURL(event.target.value));
   };
 
   const addMeme = (event) => {
     event.preventDefault();
+    if (!validUrl) return;
     const memeObject = {
       name: newName,
       caption: newCaption,
@@ -38,6 +42,9 @@ const App = () => {
         setTimeout(() => {
           setSuccessMessage('');
         }, 2000);
+        setNewName('');
+        setNewUrl('');
+        setNewCaption('');
       })
       .catch((e) => {
         setErrorMessage(e.response.data.error);
@@ -45,9 +52,6 @@ const App = () => {
           setErrorMessage('');
         }, 2000);
       });
-    setNewName('');
-    setNewUrl('');
-    setNewCaption('');
   };
 
   useEffect(() => {
@@ -88,6 +92,7 @@ const App = () => {
             handleCaptionChange={handleCaptionChange}
             handleNewUrl={newUrl}
             handleUrlChange={handleUrlChange}
+            validUrl={validUrl}
           />
         </div>
       </section>

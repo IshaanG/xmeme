@@ -1,20 +1,18 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import PropTypes from 'prop-types';
-import VisibilitySensor from 'react-visibility-sensor';
 import Card from './Card';
 
 const Deck = ({ memesToShow, handleEditClick }) => (
   <div className="columns is-multiline">
     {memesToShow.map((meme) => (
-      <VisibilitySensor key={meme.id}>
-        <Card
-          name={meme.name}
-          caption={meme.caption}
-          url={meme.url}
-          handleEditClick={handleEditClick}
-        />
-      </VisibilitySensor>
+      <Card
+        name={meme.name}
+        caption={meme.caption}
+        url={meme.url}
+        handleEditClick={handleEditClick}
+        key={meme.id}
+      />
     ))}
   </div>
 
