@@ -15,7 +15,7 @@ const Card = (props) => {
       <div className="card">
         <div className="card-image">
           <figure className="image is-4by3">
-            <Img src={[url, `${process.env.PUBLIC_URL}/placeholder-placeholder-everywhere.jpg`]} alt={caption} loading="lazy" crossorigin="anonymous" />
+            <Img src={[url, `${process.env.PUBLIC_URL}/placeholder-placeholder-everywhere.jpg`]} alt={caption} loading="lazy" />
           </figure>
         </div>
         <div className="card-content">

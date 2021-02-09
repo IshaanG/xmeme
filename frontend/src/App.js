@@ -69,7 +69,7 @@ const App = () => {
       });
   }, [successMessage]);
 
-  // TODO
+  // TODO: edit meme button
   // eslint-disable-next-line no-unused-vars
   const editMeme = (event) => {
   };
