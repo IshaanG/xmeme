@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import validator from 'validator';
+import isImageUrl from 'is-image-url';
 import memeService from './services/memes';
 import Form from './components/Form';
 import Deck from './components/Deck';
@@ -31,6 +32,7 @@ const App = () => {
   const addMeme = (event) => {
     event.preventDefault();
     if (!validUrl) return;
+    if (!isImageUrl(newUrl)) { setValidUrl(false); return; }
     const memeObject = {
       name: newName,
       caption: newCaption,
