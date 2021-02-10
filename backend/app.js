@@ -16,6 +16,7 @@ app.use('/memes', memesRouter);
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
+swaggerApp.use(morgan('dev', { skip: () => process.env.NODE_ENV === 'test' }));
 swaggerApp.use('/swagger-ui', swaggerRouter);
 
 module.exports = { app, swaggerApp };
