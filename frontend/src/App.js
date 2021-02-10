@@ -82,7 +82,11 @@ const App = () => {
 
       <section className="section">
         <div className="container">
-          <h1 className="title has-text-weight-bold has-text-centered">Meme Stream</h1>
+          <h1 className="title has-text-weight-bold has-text-centered">
+            Meme Stream
+            <a href="https://swagger.xmeme.ishaan.ninja/swagger-ui" className="button is-link is-pulled-right">swagger</a>
+          </h1>
+
         </div>
 
         <div className="container">

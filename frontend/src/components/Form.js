@@ -54,7 +54,7 @@ const Form = (props) => {
           />
         </div>
         <div className="control">
-          <button className="button is-link" type="submit">Submit Meme</button>
+          <button className="button is-primary" type="submit">Submit Meme</button>
         </div>
       </div>
 
