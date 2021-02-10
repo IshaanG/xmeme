@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,44 +16,62 @@ const Form = (props) => {
     <form onSubmit={handleOnSubmit}>
 
       <div className="field">
-        <label className="label">Meme Owner</label>
         <div className="control">
-          <input
-            className="input"
-            type="text"
-            placeholder="Enter your full name"
-            value={handleNewName}
-            onChange={handleNameChange}
-          />
+          <label className="label" htmlFor="name">
+            Meme Owner
+            <input
+              className="input"
+              type="text"
+              placeholder="Enter your full name"
+              value={handleNewName}
+              onChange={handleNameChange}
+              id="name"
+            />
+          </label>
+
         </div>
       </div>
 
       <div className="field">
-        <label className="label">Caption</label>
         <div className="control">
-          <input
-            className="input"
-            type="text"
-            placeholder="Be creative with the caption"
-            value={handleNewCaption}
-            onChange={handleCaptionChange}
-          />
+          <label className="label" htmlFor="caption">
+            Caption
+            <input
+              className="input"
+              type="text"
+              placeholder="Be creative with the caption"
+              value={handleNewCaption}
+              onChange={handleCaptionChange}
+              id="caption"
+            />
+          </label>
+
         </div>
       </div>
-      <label className="label">Meme URL</label>
 
       <div className="field has-addons ">
         <div className="control is-expanded">
-          <input
-            className="input is-expanded"
-            type="text"
-            placeholder="Enter URL of your meme here"
-            value={handleNewUrl}
-            onChange={handleUrlChange}
-          />
+          <label className="label" htmlFor="url">
+            Meme URL
+            <input
+              className="input is-expanded"
+              type="text"
+              placeholder="Enter URL of your meme here"
+              value={handleNewUrl}
+              onChange={handleUrlChange}
+              id="url"
+            />
+          </label>
+
         </div>
         <div className="control">
-          <button className="button is-primary" type="submit">Submit Meme</button>
+          <p>&nbsp;</p>
+          <button
+            className="button is-primary"
+            type="submit"
+          >
+            Submit Meme
+          </button>
         </div>
       </div>
 

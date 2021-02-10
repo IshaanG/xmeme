@@ -84,7 +84,14 @@ const App = () => {
         <div className="container">
           <h1 className="title has-text-weight-bold has-text-centered">
             Meme Stream
-            <a href="https://swagger.xmeme.ishaan.ninja/swagger-ui" className="button is-link is-pulled-right">swagger</a>
+            <a
+              href={process.env.REACT_APP_SWAGGER_URI}
+              className="button is-link is-pulled-right"
+              target="_blank"
+              rel="noreferrer"
+            >
+              swagger
+            </a>
           </h1>
 
         </div>
