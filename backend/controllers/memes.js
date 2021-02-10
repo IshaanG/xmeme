@@ -1,6 +1,141 @@
 const memesRouter = require('express').Router();
 const db = require('../db');
 
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      MemeResponse:
+ *        type: object
+ *        required:
+ *          - id
+ *          - name
+ *          - url
+ *          - caption
+ *        properties:
+ *          id:
+ *            type: int
+ *          name:
+ *            type: string
+ *          url:
+ *            type: string
+ *          caption:
+ *            type: string
+ *        example:
+ *           id: 1
+ *           name: Ishaan
+ *           url: pics.com/awesome-meme.jpg
+ *           caption: Awesome meme wow
+ */
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      MemePost:
+ *        type: object
+ *        required:
+ *          - name
+ *          - url
+ *          - caption
+ *        properties:
+ *          name:
+ *            type: string
+ *          url:
+ *            type: string
+ *          caption:
+ *            type: string
+ *        example:
+ *           name: Ishaan
+ *           url: pics.com/awesome-meme.jpg
+ *           caption: Awesome meme wow
+ */
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      MemePatch:
+ *        type: object
+ *        properties:
+ *          url:
+ *            type: string
+ *          caption:
+ *            type: string
+ *        example:
+ *           url: pics.com/awesome-meme.jpg
+ *           caption: Awesome meme wow
+ */
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      IdResponse:
+ *        type: object
+ *        required:
+ *          - id
+ *        properties:
+ *          id:
+ *            type: int
+ *        example:
+ *           id: 1
+ */
+
+/**
+ * @swagger
+ *  components:
+ *    schemas:
+ *      Error:
+ *        type: object
+ *        required:
+ *          - error
+ *        properties:
+ *          error:
+ *            type: string
+ *        example:
+ *           error: "missing value(s)"
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Memes
+ *   description: Memes endpoint
+ */
+
+/**
+ * @swagger
+ *  /memes/:
+ *    post:
+ *      summary: Create a new meme
+ *      tags: [Memes]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/MemePost'
+ *      responses:
+ *        "201":
+ *          description: A user id
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/IdResponse'
+ *        "400":
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        "409":
+ *          description: Duplicate post
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ */
 memesRouter.post('/', async (request, response) => {
   const { body } = request;
 
@@ -22,10 +157,61 @@ memesRouter.post('/', async (request, response) => {
   return response.status(201).json(result.rows[0]);
 });
 
+/**
+ * @swagger
+ *  /memes/:
+ *    get:
+ *      summary: Get latest 100 memes
+ *      tags: [Memes]
+ *      responses:
+ *        "200":
+ *          description: An array of meme objects
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: "array"
+ *                items:
+ *                  $ref: '#/components/schemas/MemeResponse'
+ */
 memesRouter.get('/', async (request, response) => {
   const result = await db.query('SELECT id, name, url, caption FROM memes ORDER BY created DESC LIMIT 100');
   response.json(result.rows);
 });
+
+/**
+ * @swagger
+ *  /memes/{memeId}:
+ *    get:
+ *      summary: Get a meme by id
+ *      tags: [Memes]
+ *      parameters:
+ *        - in: path
+ *          name: memeId
+ *          schema:
+ *            type: integer
+ *            minimum: 1
+ *          required: true
+ *          description: Id of the meme
+ *      responses:
+ *        "200":
+ *          description: An meme object
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/MemeResponse'
+ *        "400":
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        "404":
+ *          description: Id not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ */
 
 memesRouter.get('/:id', async (request, response) => {
   const { params } = request;
@@ -38,6 +224,42 @@ memesRouter.get('/:id', async (request, response) => {
   return response.json(result.rows[0]);
 });
 
+/**
+ * @swagger
+ *  /memes/{memeId}:
+ *    patch:
+ *      summary: Patch an existing meme
+ *      tags: [Memes]
+ *      parameters:
+ *        - in: path
+ *          name: memeId
+ *          schema:
+ *            type: integer
+ *            minimum: 1
+ *          required: true
+ *          description: Id of the meme
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/MemePatch'
+ *      responses:
+ *        "204":
+ *          description: Resource modified successfully
+ *        "400":
+ *          description: Bad request
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ *        "404":
+ *          description: Id not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/Error'
+ */
 memesRouter.patch('/:id', async (request, response) => {
   const { body } = request;
   const { params } = request;

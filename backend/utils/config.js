@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const {
-  PORT, PGHOST, PGUSER, PGPASSWORD, PGPORT,
+  PORT, SWAGGER_PORT, PGHOST, PGUSER, PGPASSWORD, PGPORT,
 } = process.env;
 let { PGDATABASE } = process.env;
 
@@ -11,6 +11,7 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = {
   PORT,
+  SWAGGER_PORT,
   PGHOST,
   PGUSER,
   PGDATABASE,
