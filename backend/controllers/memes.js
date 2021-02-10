@@ -143,8 +143,10 @@ memesRouter.post('/', async (request, response) => {
     return response.status(400).send({ error: 'missing value(s)' });
   }
 
-  const check = await db.query('SELECT id FROM memes WHERE name = $1 AND url = $2 AND caption = $3',
-    [body.name, body.url, body.caption]);
+  const check = await db.query(
+    'SELECT id FROM memes WHERE name = $1 AND url = $2 AND caption = $3',
+    [body.name, body.url, body.caption],
+  );
   if (check.rows.length !== 0) {
     return response.status(409).send({ error: 'duplicate post' });
   }
@@ -174,7 +176,9 @@ memesRouter.post('/', async (request, response) => {
  *                  $ref: '#/components/schemas/MemeResponse'
  */
 memesRouter.get('/', async (request, response) => {
-  const result = await db.query('SELECT id, name, url, caption FROM memes ORDER BY created DESC LIMIT 100');
+  const result = await db.query(
+    'SELECT id, name, url, caption FROM memes ORDER BY created DESC LIMIT 100',
+  );
   response.json(result.rows);
 });
 
@@ -216,8 +220,10 @@ memesRouter.get('/', async (request, response) => {
 memesRouter.get('/:id', async (request, response) => {
   const { params } = request;
 
-  const result = await db.query('SELECT id, name, url, caption FROM memes WHERE id = $1',
-    [params.id]);
+  const result = await db.query(
+    'SELECT id, name, url, caption FROM memes WHERE id = $1',
+    [params.id],
+  );
   if (result.rowCount === 0) {
     return response.status(404).send({ error: 'id not found' });
   }
@@ -266,12 +272,16 @@ memesRouter.patch('/:id', async (request, response) => {
 
   let result;
   if (body.url !== null && body.url !== '') {
-    result = await db.query('UPDATE memes SET url = $1, updated = $2 WHERE id = $3',
-      [body.url, new Date(), params.id]);
+    result = await db.query(
+      'UPDATE memes SET url = $1, updated = $2 WHERE id = $3',
+      [body.url, new Date(), params.id],
+    );
   }
   if (body.caption !== null && body.caption !== '') {
-    result = await db.query('UPDATE memes SET caption = $1, updated = $2 WHERE id = $3',
-      [body.caption, new Date(), params.id]);
+    result = await db.query(
+      'UPDATE memes SET caption = $1, updated = $2 WHERE id = $3',
+      [body.caption, new Date(), params.id],
+    );
   }
   if (result === null || result.rowCount > 0) {
     response.status(204).end();

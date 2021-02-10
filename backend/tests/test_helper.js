@@ -25,7 +25,10 @@ const clearDb = async () => {
   await db.query('TRUNCATE memes RESTART IDENTITY');
 };
 const getMemeWithId = async (id) => {
-  const result = await db.query('SELECT * FROM memes where id = $1', [id]);
+  const result = await db.query(
+    'SELECT * FROM memes where id = $1',
+    [id],
+  );
   return result.rows[0];
 };
 
