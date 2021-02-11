@@ -9,6 +9,7 @@ const Deck = ({ memesToShow, handleEditClick }) => (
         name={meme.name}
         caption={meme.caption}
         url={meme.url}
+        id={meme.id}
         handleEditClick={handleEditClick}
         key={meme.id}
       />

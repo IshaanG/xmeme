@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import validator from 'validator';
 import isImageUrl from 'is-image-url';
 import memeService from './services/memes';
 import Form from './components/Form';
@@ -26,7 +25,7 @@ const App = () => {
 
   const handleUrlChange = (event) => {
     setNewUrl(event.target.value);
-    setValidUrl(validator.isURL(event.target.value));
+    setValidUrl(true);
   };
 
   const addMeme = (event) => {
@@ -49,13 +48,46 @@ const App = () => {
         setNewCaption('');
       })
       .catch((e) => {
-        setErrorMessage(e.response.data.error);
-        setTimeout(() => {
-          setErrorMessage('');
-        }, 2000);
+        if (e.response) {
+          setErrorMessage(e.response.data.error);
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 2000);
+        } else {
+          setErrorMessage('Cannot reach server');
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 2000);
+        }
       });
   };
 
+  const editMeme = (id, editedUrl, editedCaption) => {
+    const memeObject = {
+      caption: editedCaption,
+      url: editedUrl,
+    };
+    memeService.update(id, memeObject)
+      .then(() => {
+        setSuccessMessage(`Updated ${newCaption}`);
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 2000);
+      })
+      .catch((e) => {
+        if (e.response) {
+          setErrorMessage(e.response.data.error);
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 2000);
+        } else {
+          setErrorMessage('Cannot reach server');
+          setTimeout(() => {
+            setErrorMessage('');
+          }, 2000);
+        }
+      });
+  };
   useEffect(() => {
     if (successMessage === '' && memes.length) return;
     memeService
@@ -70,11 +102,6 @@ const App = () => {
         }, 2000);
       });
   }, [successMessage]);
-
-  // TODO: edit meme button
-  // eslint-disable-next-line no-unused-vars
-  const editMeme = (event) => {
-  };
 
   return (
     <div>
