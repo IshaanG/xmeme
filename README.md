@@ -3,6 +3,8 @@
 A website to discover and share memes. Submission for Crio Winter of Doing stage 2B.
 https://xmeme.ishaan.ninja
 
+[![YouTube Demo](https://img.youtube.com/vi/DjMzYUUyWmo/0.jpg)](https://www.youtube.com/watch?v=DjMzYUUyWmo)
+
 ## Structure
 
 - backend -> Node.js/express API
